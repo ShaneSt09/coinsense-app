@@ -2,8 +2,21 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import { getAuth, signInAnonymously } from 'firebase/auth';
+import { app } from '../services/firebaseConfig';
+
 export default function WelcomeScreen() {
   const navigation = useNavigation();
+
+  const handleContinue = async () => {
+    try {
+      const auth = getAuth(app);
+      await signInAnonymously(auth);
+      navigation.replace('Income'); // triggers onboarding flow
+    } catch (err) {
+      console.error('Anon login failed:', err);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -13,7 +26,7 @@ export default function WelcomeScreen() {
       </Text>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Income')}
+        onPress={handleContinue}
       >
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>

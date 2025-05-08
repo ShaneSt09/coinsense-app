@@ -10,22 +10,24 @@ export default function OnboardingSummaryScreen() {
   const { income, tracking, goal } = route.params;
 
   const handleFinish = async () => {
-    console.log("Button tapped");
-  
+    console.log('Button tapped');
     try {
       const result = await saveOnboardingData({ income, tracking, goal });
-      console.log("Save result:", result);
+      console.log('Save result:', result);
   
       if (result) {
-        navigation.navigate('Dashboard');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Dashboard' }],
+        });
       } else {
-        alert('Something went wrong. Try again.');
+        alert('Something went wrong. Please try again.');
       }
     } catch (err) {
-      console.error("Crash in handleFinish:", err);
+      console.error('Crash in handleFinish:', err);
+      alert('Unexpected error. Please try again.');
     }
   };
-  
 
   return (
     <View style={styles.container}>
